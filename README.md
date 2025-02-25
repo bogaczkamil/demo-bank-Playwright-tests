@@ -1,4 +1,4 @@
-# Test Automation training from jaktestowac.pl
+# Test Automation training
 
 ## Links
 - test site https://demo-bank.vercel.app/  
@@ -40,3 +40,26 @@
     timeout: 5000,
   },
   ```
+
+  ## Visual Studio Code
+  - Prewiev: for README.md
+  - Autosave: in File -> Auto Save
+  - Timeline: file context menu -> Open Timeline
+  - Formatting: editor -> context menu -> Format document OR Shift+Alt+F
+
+  ## Playwright snippets
+  - test:
+    ```javascript
+    test('test description', async ({ page }) => {
+    
+    });
+    ```
+  - describe:
+     ```javascript
+     describe('Group description', () => {
+
+     });
+    ```
+
+  - running one test: `test.only`
+  - getting out of selected field: `await page.getByTestId("password-input").blur();`
