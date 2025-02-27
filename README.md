@@ -56,7 +56,7 @@
     ```
   - describe:
      ```javascript
-     describe('Group description', () => {
+     test.describe('Group description', () => {
 
      });
     ```
