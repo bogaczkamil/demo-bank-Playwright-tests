@@ -16,6 +16,8 @@
 `npx playwright test --headed`
 - view report  
 `npx playwright show-report`
+- cancelling Node process  
+hit twice <kbd>Ctrl</kbd> + <kbd>C</kbd>
 
 ## Playwright Config modifications
 - config file `playwright.config.ts`
@@ -46,16 +48,25 @@
   - Autosave: in File -> Auto Save
   - Timeline: file context menu -> Open Timeline
   - Formatting: editor -> context menu -> Format document OR Shift+Alt+F
+  - Searching: editor -> <kbd>CTRL</kbd> + <kbd>F</kbd>
+  - Accept hint in editor: <kbd>Enter</kbd>
+  - Comment/Uncomment: <kbd>Ctrl</kbd> + <kbd>/</kbd>
+  - Duplicate line: <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>↑</kbd>
+  - Use more than one terminal: <kbd>+</kbd> button in TERMINAL
 
   ## Playwright snippets
+  - import:
+    ```typescript
+    import { test, expect } from '@playwright/test';
+    ```
   - test:
-    ```javascript
+    ```typescript
     test('test description', async ({ page }) => {
     
     });
     ```
   - describe:
-     ```javascript
+     ```typescript
      test.describe('Group description', () => {
 
      });
@@ -63,3 +74,15 @@
 
   - running one test: `test.only`
   - getting out of selected field: `await page.getByTestId("password-input").blur();`
+
+
+  ## Locators
+- `getByTestId` i.e. `getByTestId('login-input')` for element with `data-testid="login-input"`
+- `getByRole` i.e. `getByRole('button', { name: 'wykonaj' })`
+- `locator` i.e. `locator('#some-id')` for element with attribute `id="some-id"`, `#some-id` is `css` selector
+
+## Chrome
+- use English version!
+- open DevTools <kbd>F12</kbd> or right click `Inspect`
+- get selector: right click on element -> Copy -> Copy selector
+- testing CSS selectors in Console: `$$('selector')`
