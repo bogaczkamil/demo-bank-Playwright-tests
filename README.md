@@ -74,18 +74,18 @@
 
   - import:
     ```typescript
-    import { test, expect } from "@playwright/test";
+    import { test, expect } from '@playwright/test';
     ```
   - test:
 
     ```typescript
-    test("test description", async ({ page }) => {});
+    test('test description', async ({ page }) => {});
     ```
 
   - describe:
 
     ```typescript
-    test.describe("Group description", () => {});
+    test.describe('Group description', () => {});
     ```
 
   - running one test: `test.only`
@@ -116,3 +116,23 @@
 - open DevTools <kbd>F12</kbd> or right click `Inspect`
 - get selector: right click on element -> Copy -> Copy selector
 - testing CSS selectors in Console: `$$('selector')`
+
+### Prettier
+- install Prettier  
+`npm install --save-dev --save-exact prettier`
+- configure Prettier
+    - exlude files in `.prettierignore`
+        ```
+        package-lock.json
+        playwright-report
+
+        ```
+    - set rules in `.prettierrc.json`
+        ```
+        {
+            "singleQuote": true
+        }
+        ```
+- run Prettier  
+`npx prettier --write .`
+- additionaly you can install VSC extension: **Prettier**
