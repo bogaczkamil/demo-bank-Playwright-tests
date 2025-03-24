@@ -1,5 +1,7 @@
 # Test Automation training
 
+This is a Test Automation project based on `Playwright` and `TypeScript`. The tested page is a simple demo of a bank.
+
 ## Links
 
 - test site https://demo-bank.vercel.app/
@@ -20,6 +22,19 @@
   `npx playwright show-report`
 - cancelling Node process  
   hit twice <kbd>Ctrl</kbd> + <kbd>C</kbd>
+- run Trace Viewer on zip file  
+  `npx playwright show-trace trace.zip`
+
+### Updating Playwright
+
+- check if Playwright should be updated  
+  `npm outdated @playwright/test`
+- update Playwright  
+  `npm i @playwright/test`
+- update browsers  
+  `npx playwright install`
+- verify Playwright version  
+  `npx @playwright/test --version`
 
   ## Visual Studio Code
 
@@ -41,6 +56,7 @@
   ## Plugins
 
   - GitLens - view details of your repository i.e. commits history
+  - Prettier - default formatter for editor
 
   ## Playwright
 
@@ -70,6 +86,20 @@
   },
   ```
 
+- enable video on fail
+  ```javascript
+  use: {
+      video: {'retain-on-failure'},
+  },
+  ```
+- enable Trace Viewer on fail
+
+  ```javascript
+  use: {
+      trace: {'retain-on-failure'},
+  },
+  ```
+
   ### Playwright snippets
 
   - import:
@@ -88,7 +118,7 @@
     test.describe('Group description', () => {});
     ```
 
-  - running one test: `test.only`
+  - running given test: `test.only`
   - getting out of selected field: `await page.getByTestId("password-input").blur();`
 
   ### Locators
@@ -96,17 +126,6 @@
 - `getByTestId` i.e. `getByTestId('login-input')` for element with `data-testid="login-input"`
 - `getByRole` i.e. `getByRole('button', { name: 'wykonaj' })`
 - `locator` i.e. `locator('#some-id')` for element with attribute `id="some-id"`, `#some-id` is `css` selector
-
-### Updating Playwright
-
-- check if Playwright should be updated  
-  `npm outdated @playwright/test`
-- update Playwright  
-  `npm i @playwright/test`
-- update browsers  
-  `npx playwright install`
-- verify Playwright version  
-  `npx @playwright/test --version`
 
 ## Other
 
@@ -118,21 +137,26 @@
 - testing CSS selectors in Console: `$$('selector')`
 
 ### Prettier
-- install Prettier  
-`npm install --save-dev --save-exact prettier`
-- configure Prettier
-    - exlude files in `.prettierignore`
-        ```
-        package-lock.json
-        playwright-report
 
-        ```
-    - set rules in `.prettierrc.json`
-        ```
-        {
-            "singleQuote": true
-        }
-        ```
+- install Prettier  
+  `npm install --save-dev --save-exact prettier`
+- configure Prettier
+
+  - exlude files in `.prettierignore`
+
+    ```
+    package-lock.json
+    playwright-report
+
+    ```
+
+  - set rules in `.prettierrc.json`
+    ```
+    {
+        "singleQuote": true
+    }
+    ```
+
 - run Prettier  
-`npx prettier --write .`
+  `npx prettier --write .`
 - additionaly you can install VSC extension: **Prettier**
