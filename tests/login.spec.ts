@@ -1,16 +1,19 @@
 import { test, expect } from '@playwright/test';
 
-const url = 'https://demo-bank.vercel.app/index.html';
-const userId = 'tester12';
+
 
 test.describe('User login to Demobank', () => {
+  const userId = 'tester12';
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+  })
+
   test('successful login with valid credentials', async ({ page }) => {
     // Arrange
     const userPassword = 'asdf4561';
     const expectedUserName = 'Jan Demobankowy';
 
     //Act
-    await page.goto(url);
     await page.getByTestId('login-input').fill(userId);
     await page.getByTestId('password-input').fill(userPassword);
     await page.getByTestId('login-button').click();
@@ -25,7 +28,6 @@ test.describe('User login to Demobank', () => {
     const userIdValidationMessage = 'identyfikator ma min. 8 znaków';
 
     // Act
-    await page.goto(url);
     await page.getByTestId('login-input').fill(invalidUserId);
     await page.getByTestId('password-input').click();
 
@@ -41,11 +43,10 @@ test.describe('User login to Demobank', () => {
     const userPasswordasswordValidationMessage = 'hasło ma min. 8 znaków';
 
     // Act
-    await page.goto(url);
     await page.getByTestId('login-input').fill(userId);
     await page.getByTestId('password-input').fill(invalidPassword);
     await page.getByTestId('password-input').blur();
-    
+
     // Assert
     await expect(page.getByTestId('error-login-password')).toHaveText(
       userPasswordasswordValidationMessage,
