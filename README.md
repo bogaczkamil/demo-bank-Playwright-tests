@@ -24,6 +24,8 @@ This is a Test Automation project based on `Playwright` and `TypeScript`. The te
   hit twice <kbd>Ctrl</kbd> + <kbd>C</kbd>
 - run Trace Viewer on zip file  
   `npx playwright show-trace trace.zip`
+- run tests from exact file
+  `npx playwright test tests/login.spec.ts`
 
 ### Updating Playwright
 
@@ -52,6 +54,20 @@ This is a Test Automation project based on `Playwright` and `TypeScript`. The te
   - Extract to variable: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd>
   - Move line i.e. up: <kbd>Alt</kbd> + <kbd>↑</kbd>
   - Creating a new variable: Refactor <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> -> Extract to constant in enclosing scope
+
+## Terminal (console)
+
+- Open: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd>
+- Cancelling Node process: hit twice <kbd>Ctrl</kbd> + <kbd>C</kbd>
+- Open file: <kbd>Ctrl</kbd> + mouse click
+- Autocomplete: <kbd>Tab</kbd>
+- Paste in terminal shortcuts:
+  - <kbd>Ctrl</kbd> + <kbd>V</kbd>
+  - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd>
+  - <kbd>Shift</kbd> + <kbd>Insert</kbd>
+  - right mouse button
+- Use more than one terminal: <kbd>+</kbd> sign in TERMINAL
+- Use another terminal (Git Bash, JavaScript Debug): <kbd>˅</kbd> sign in TERMINAL
 
   ## Plugins
 
@@ -118,6 +134,16 @@ This is a Test Automation project based on `Playwright` and `TypeScript`. The te
     test.describe('Group description', () => {});
     ```
 
+    - hook beforeEach:
+
+  ```typescript
+  test.befoerEach('async ({ page }) => {
+    //your code
+  });
+  ```
+
+- running given test: `test.only`
+
   - running given test: `test.only`
   - getting out of selected field: `await page.getByTestId("password-input").blur();`
 
@@ -160,3 +186,18 @@ This is a Test Automation project based on `Playwright` and `TypeScript`. The te
 - run Prettier  
   `npx prettier --write .`
 - additionaly you can install VSC extension: **Prettier**
+
+### package.json example scripts
+
+- single command:  
+  `"test": "npx playwright test",`
+- command with parameters:  
+  `"test:headed": "npx playwright test --headed",`
+- other script with added parameters:  
+  `"test:pulpit:hd" : "npm run test tests/pulpit.spec.ts -- --headed"`
+
+Scripts can be run in standard and debug mode by:
+
+- hovering over script name and using opition **Run**
+- entering command `npm run script_name` i.e. `npm run test`
+- using `NPM Scripts` tab in **Explorer** view (need to be enabled in **EXPLORER** settings)

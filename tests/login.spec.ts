@@ -1,12 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-
-
 test.describe('User login to Demobank', () => {
   const userId = 'tester12';
   test.beforeEach(async ({ page }) => {
-    await page.goto('/')
-  })
+    await page.goto('/');
+  });
 
   test('successful login with valid credentials', async ({ page }) => {
     // Arrange
