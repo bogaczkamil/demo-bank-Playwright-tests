@@ -17,14 +17,15 @@ test.describe('Pulpit tests', () => {
     const transferTitle = 'pizza';
     const expectedTransferReceiver = 'Chuck Demobankowy';
     const expectedMessage = `Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`;
-    //Act
 
+    //Act
     await page.locator('#widget_1_transfer_receiver').selectOption(receiverId);
     await page.locator('#widget_1_transfer_amount').fill(transferAmount);
     await page.locator('#widget_1_transfer_title').fill(transferTitle);
 
     await page.getByRole('button', { name: 'wykonaj' }).click();
     await page.getByTestId('close-button').click();
+
     //Assert
     await expect(page.locator('#show_messages')).toHaveText(expectedMessage);
   });
@@ -34,8 +35,8 @@ test.describe('Pulpit tests', () => {
     const topupReceiverNumber = '500 xxx xxx';
     const topupAmount = '50';
     const expectedMessage = `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiverNumber}`;
-    // Act
 
+    // Act
     await page
       .locator('#widget_1_topup_receiver')
       .selectOption(topupReceiverNumber);
@@ -47,16 +48,16 @@ test.describe('Pulpit tests', () => {
     await expect(page.locator('#show_messages')).toHaveText(expectedMessage);
   });
 
-  test('correct balance after successful mobile top-up', async ({
-    page,
-  }) => {
+  test('correct balance after successful mobile top-up', async ({ page }) => {
     // Arrange
     const topupReceiverNumber = '500 xxx xxx';
     const topupAmount = '50';
-    const initialBalance = await page.locator('#money_value').innerText();
+    const value = await page.locator('#money_value').innerText();
+    const decimal = await page.locator('#decimal_value').innerText();
+    const initialBalance = Number(`${value}.${decimal}`);
     const expectedBalance = Number(initialBalance) - Number(topupAmount);
-    // Act
 
+    // Act
     await page
       .locator('#widget_1_topup_receiver')
       .selectOption(topupReceiverNumber);
@@ -65,6 +66,11 @@ test.describe('Pulpit tests', () => {
     await page.getByRole('button', { name: 'doładuj telefon' }).click();
     await page.getByTestId('close-button').click();
 
-    await expect(page.locator('#money_value')).toHaveText(`${expectedBalance}`);
+    //Assert
+    const newValue = await page.locator('#money_value').innerText();
+    const newDecimal = await page.locator('#decimal_value').innerText();
+    const uiBalance = Number(`${newValue}.${newDecimal}`);
+
+    expect(uiBalance).toBeCloseTo(expectedBalance, 2);
   });
 });
