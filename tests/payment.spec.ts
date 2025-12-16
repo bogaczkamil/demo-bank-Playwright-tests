@@ -5,7 +5,7 @@ test.describe('Payment tests', () => {
   const userId = loginData.userId;
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    const userPassword = loginData.password;
+    const userPassword = loginData.userPassword;
     await page.getByTestId('login-input').fill(userId);
     await page.getByTestId('password-input').fill(userPassword);
     await page.getByTestId('login-button').click();
