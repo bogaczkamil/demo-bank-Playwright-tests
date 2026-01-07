@@ -38,8 +38,8 @@ export default defineConfig({
     baseURL: 'https://demo-bank.vercel.app/index.html',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on',
-    // trace: 'retain-on-failure',
+    // trace: 'on',
+    trace: 'retain-on-failure',
     video: 'retain-on-failure',
   },
 

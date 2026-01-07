@@ -2,6 +2,14 @@
 
 This is a Test Automation project based on `Playwright` and `TypeScript`. The tested page is a simple demo of a bank.
 
+- [Links](#links)
+- [Commands](#commands)
+- [Visual Studio Code](#visual-studio-code)
+- [Extensions](#extensions)
+- [Playwright](#playwright)
+- [Other](#other)
+- [Simple Page Object Model](#simple-page-object-model)
+
 ## Links
 
 - test site https://demo-bank.vercel.app/
@@ -53,7 +61,13 @@ This is a Test Automation project based on `Playwright` and `TypeScript`. The te
   - Use more than one terminal: <kbd>+</kbd> button in TERMINAL
   - Extract to variable: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd>
   - Move line i.e. up: <kbd>Alt</kbd> + <kbd>↑</kbd>
+  - Show autocomplete suggestion: <kbd>Ctrl</kbd> + <kbd>Spacebar</kbd>
   - Creating a new variable: Refactor <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> -> Extract to constant in enclosing scope
+  - Format code on save:
+    - Top menu: View -> Open Command Palette
+    - Type: user settings - chose `Preferences: Open User Settings`
+    - Search: format on save
+    - Edit: check `Editor Format On Save`
 
 ## Terminal (console)
 
@@ -69,14 +83,17 @@ This is a Test Automation project based on `Playwright` and `TypeScript`. The te
 - Use more than one terminal: <kbd>+</kbd> sign in TERMINAL
 - Use another terminal (Git Bash, JavaScript Debug): <kbd>˅</kbd> sign in TERMINAL
 
-  ## Plugins
+To quickly evaluate code use `DEBUG CONSOLE`.
 
-  - GitLens - view details of your repository i.e. commits history
-  - Prettier - default formatter for editor
+## Plugins
 
-  ## Playwright
+- GitLens - view details of your repository i.e. commits history
+- Prettier - default formatter for editor
+- Playwright Test for VSCode - run and record tests form VSC
 
-  ### Playwright Config modifications
+## Playwright
+
+### Playwright Config modifications
 
 - config file `playwright.config.ts`
 - disable browsers, i.e. Firefox
@@ -142,8 +159,6 @@ This is a Test Automation project based on `Playwright` and `TypeScript`. The te
   });
   ```
 
-- running given test: `test.only`
-
   - running given test: `test.only`
   - getting out of selected field: `await page.getByTestId("password-input").blur();`
 
@@ -173,19 +188,22 @@ This is a Test Automation project based on `Playwright` and `TypeScript`. The te
     ```
     package-lock.json
     playwright-report
+    test-results
 
     ```
 
   - set rules in `.prettierrc.json`
     ```
     {
-        "singleQuote": true
+        "singleQuote": true,
+        "endOfLine": "auto"
     }
     ```
 
 - run Prettier  
   `npx prettier --write .`
 - additionaly you can install VSC extension: **Prettier**
+  - and set default VSC formatter as Prettier (right mouse button and `Format document with ...`)
 
 ### package.json example scripts
 
@@ -201,3 +219,59 @@ Scripts can be run in standard and debug mode by:
 - hovering over script name and using opition **Run**
 - entering command `npm run script_name` i.e. `npm run test`
 - using `NPM Scripts` tab in **Explorer** view (need to be enabled in **EXPLORER** settings)
+
+## Simple Page Object Model
+
+Simple implementation of Page Object Model can be based on _classes_ that represents and implements tested pages.
+Those classes contains _locators_ of elements, that are used in tests, e.g. buttons, inputs etc.
+
+Directory structure:
+
+```
++-- Projects
+|   +-- pages
+|       +-- login.page.ts
+|       +-- ...
+|   +-- tests
+|       +-- login.spec.ts
+|       +-- ...
+```
+
+### Page implementation
+
+Simple implementation of login page in `./pages/login.page.ts`:
+
+```
+import { Page } from '@playwright/test';
+
+export class LoginPage {
+  constructor(private page: Page) {}
+
+  loginInput = this.page.getByTestId('login-input');
+  passwordInput = this.page.getByTestId('password-input');
+  loginButton = this.page.getByTestId('login-button');
+
+  async login(userId: string, userPassword:string): Promise<void> {
+    await this.loginInput.fill(userId)
+    await this.passwordInput.fill(userPassword)
+    await this.loginButton.click()
+  }
+}
+
+```
+
+#### Usage in tests
+
+First import of selected page:
+
+```
+import { LoginPage } from '../pages/login.page';
+```
+
+Then use page in tests:
+
+```
+    // Act
+    const loginPage = new LoginPage(page)
+    await loginPage.login(userId, userPassword)
+```
