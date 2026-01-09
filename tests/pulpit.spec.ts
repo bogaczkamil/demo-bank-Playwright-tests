@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginData } from '../test-data/login.data';
 import { LoginPage } from '../pages/login.page';
+import { PulpitPage } from '../pages/pulpit.page';
 
 test.describe('Pulpit tests', () => {
   test.beforeEach(async ({ page }) => {
@@ -20,17 +21,17 @@ test.describe('Pulpit tests', () => {
     const transferTitle = 'pizza';
     const expectedTransferReceiver = 'Chuck Demobankowy';
     const expectedMessage = `Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`;
-
+    const pulpitPage = new PulpitPage(page);
     //Act
-    await page.locator('#widget_1_transfer_receiver').selectOption(receiverId);
-    await page.locator('#widget_1_transfer_amount').fill(transferAmount);
-    await page.locator('#widget_1_transfer_title').fill(transferTitle);
+    await pulpitPage.transferReceiver.selectOption(receiverId);
+    await pulpitPage.transferAmount.fill(transferAmount);
+    await pulpitPage.transferTitle.fill(transferTitle);
 
-    await page.getByRole('button', { name: 'wykonaj' }).click();
-    await page.getByTestId('close-button').click();
+    await pulpitPage.transferButton.click();
+    await pulpitPage.closeButton.click();
 
     //Assert
-    await expect(page.locator('#show_messages')).toHaveText(expectedMessage);
+    await expect(pulpitPage.actionMessage).toHaveText(expectedMessage);
   });
 
   test('successful mobile top-up', async ({ page }) => {
@@ -38,40 +39,38 @@ test.describe('Pulpit tests', () => {
     const topupReceiverNumber = '500 xxx xxx';
     const topupAmount = '50';
     const expectedMessage = `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiverNumber}`;
-
+    const pulpitPage = new PulpitPage(page);
     // Act
-    await page
-      .locator('#widget_1_topup_receiver')
-      .selectOption(topupReceiverNumber);
-    await page.locator('#widget_1_topup_amount').fill(topupAmount);
-    await page.locator('#uniform-widget_1_topup_agreement span').click();
-    await page.getByRole('button', { name: 'doładuj telefon' }).click();
-    await page.getByTestId('close-button').click();
 
-    await expect(page.locator('#show_messages')).toHaveText(expectedMessage);
+    await pulpitPage.topupReceiverInput.selectOption(topupReceiverNumber);
+    await pulpitPage.topupAmountInput.fill(topupAmount);
+    await pulpitPage.topupAgreementCheckbox.click();
+    await pulpitPage.topupExecuteButton.click();
+    await pulpitPage.closeButton.click();
+
+    await expect(pulpitPage.actionMessage).toHaveText(expectedMessage);
   });
 
   test('correct balance after successful mobile top-up', async ({ page }) => {
     // Arrange
+    const pulpitPage = new PulpitPage(page);
     const topupReceiverNumber = '500 xxx xxx';
     const topupAmount = '50';
-    const value = await page.locator('#money_value').innerText();
-    const decimal = await page.locator('#decimal_value').innerText();
-    const initialBalance = Number(`${value}.${decimal}`);
+    const integer = await pulpitPage.integer.innerText();
+    const decimal = await pulpitPage.decimal.innerText();
+    const initialBalance = Number(`${integer}.${decimal}`);
     const expectedBalance = Number(initialBalance) - Number(topupAmount);
 
     // Act
-    await page
-      .locator('#widget_1_topup_receiver')
-      .selectOption(topupReceiverNumber);
-    await page.locator('#widget_1_topup_amount').fill(topupAmount);
-    await page.locator('#uniform-widget_1_topup_agreement span').click();
-    await page.getByRole('button', { name: 'doładuj telefon' }).click();
-    await page.getByTestId('close-button').click();
+    await pulpitPage.topupReceiverInput.selectOption(topupReceiverNumber);
+    await pulpitPage.topupAmountInput.fill(topupAmount);
+    await pulpitPage.topupAgreementCheckbox.click();
+    await pulpitPage.topupExecuteButton.click();
+    await pulpitPage.closeButton.click();
 
     //Assert
-    const newValue = await page.locator('#money_value').innerText();
-    const newDecimal = await page.locator('#decimal_value').innerText();
+    const newValue = await pulpitPage.integer.innerText();
+    const newDecimal = await pulpitPage.decimal.innerText();
     const uiBalance = Number(`${newValue}.${newDecimal}`);
 
     expect(uiBalance).toBeCloseTo(expectedBalance, 2);
