@@ -4,22 +4,22 @@ import { LoginPage } from '../pages/login.page';
 import { PulpitPage } from '../pages/pulpit.page';
 
 test.describe('User login to Demobank', () => {
-  const userId = loginData.userId;
+  let loginPage: LoginPage;
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    loginPage = new LoginPage(page);
   });
 
   test('successful login with valid credentials', async ({ page }) => {
     // Arrange
+    const userId = loginData.userId;
     const userPassword = loginData.userPassword;
     const expectedUserName = 'Jan Demobankowy';
-    const loginPage = new LoginPage(page);
     const pulpitPage = new PulpitPage(page);
 
     //Act
-    await loginPage.loginInput.fill(userId);
-    await loginPage.passwordInput.fill(userPassword);
-    await loginPage.loginButton.click();
+    await loginPage.login(userId, userPassword);
 
     //Assert
     await expect(pulpitPage.userName).toHaveText(expectedUserName);
@@ -29,7 +29,6 @@ test.describe('User login to Demobank', () => {
     // Arrange
     const invalidUserId = 'tester1';
     const userIdValidationMessage = 'identyfikator ma min. 8 znaków';
-    const loginPage = new LoginPage(page);
 
     // Act
     await loginPage.loginInput.fill(invalidUserId);
@@ -41,9 +40,9 @@ test.describe('User login to Demobank', () => {
 
   test('unsuccessful login with too short password', async ({ page }) => {
     // Arrange
+    const userId = loginData.userId;
     const invalidPassword = '1234';
     const userPasswordValidationMessage = 'hasło ma min. 8 znaków';
-    const loginPage = new LoginPage(page);
 
     // Act
     await loginPage.loginInput.fill(userId);
