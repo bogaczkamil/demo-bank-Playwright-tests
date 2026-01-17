@@ -19,4 +19,15 @@ export class PaymentPage {
     });
     this.closeButton = this.page.getByTestId('close-button');
   }
+  async makeTransfer(
+    transferReceiver: string,
+    transferAccount: string,
+    transferAmount: string,
+  ): Promise<void> {
+    await this.transferReceiverInput.fill(transferReceiver);
+    await this.receiverAccountInput.fill(transferAccount);
+    await this.transferAmountInput.fill(transferAmount);
+    await this.transferButton.click();
+    await this.closeButton.click();
+  }
 }
