@@ -36,4 +36,25 @@ export class PulpitPage {
     this.integer = this.page.locator('#money_value');
     this.decimal = this.page.locator('#decimal_value');
   }
+
+  async makeQuickTransfer(
+    receiverId: string,
+    transferAmount: string,
+    transferTitle: string,
+  ) {
+    await this.transferReceiver.selectOption(receiverId);
+    await this.transferAmount.fill(transferAmount);
+    await this.transferTitle.fill(transferTitle);
+
+    await this.transferButton.click();
+    await this.closeButton.click();
+  }
+
+  async makeMobileTopup(topupReceiverNumber: string, topupAmount: string) {
+    await this.topupReceiverInput.selectOption(topupReceiverNumber);
+    await this.topupAmountInput.fill(topupAmount);
+    await this.topupAgreementCheckbox.click();
+    await this.topupExecuteButton.click();
+    await this.closeButton.click();
+  }
 }

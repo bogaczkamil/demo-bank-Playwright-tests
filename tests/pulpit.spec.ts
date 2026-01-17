@@ -12,6 +12,7 @@ test.describe('Pulpit tests', () => {
 
     await page.goto('/');
     const loginPage = new LoginPage(page);
+
     await loginPage.login(userId, userPassword);
     pulpitPage = new PulpitPage(page);
   });
@@ -23,12 +24,11 @@ test.describe('Pulpit tests', () => {
     const expectedTransferReceiver = 'Chuck Demobankowy';
     const expectedMessage = `Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`;
     //Act
-    await pulpitPage.transferReceiver.selectOption(receiverId);
-    await pulpitPage.transferAmount.fill(transferAmount);
-    await pulpitPage.transferTitle.fill(transferTitle);
-
-    await pulpitPage.transferButton.click();
-    await pulpitPage.closeButton.click();
+    await pulpitPage.makeQuickTransfer(
+      receiverId,
+      transferAmount,
+      transferTitle,
+    );
 
     //Assert
     await expect(pulpitPage.actionMessage).toHaveText(expectedMessage);
@@ -41,12 +41,9 @@ test.describe('Pulpit tests', () => {
     const expectedMessage = `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiverNumber}`;
     // Act
 
-    await pulpitPage.topupReceiverInput.selectOption(topupReceiverNumber);
-    await pulpitPage.topupAmountInput.fill(topupAmount);
-    await pulpitPage.topupAgreementCheckbox.click();
-    await pulpitPage.topupExecuteButton.click();
-    await pulpitPage.closeButton.click();
+    await pulpitPage.makeMobileTopup(topupReceiverNumber, topupAmount);
 
+    //Assert
     await expect(pulpitPage.actionMessage).toHaveText(expectedMessage);
   });
 
@@ -60,11 +57,7 @@ test.describe('Pulpit tests', () => {
     const expectedBalance = Number(initialBalance) - Number(topupAmount);
 
     // Act
-    await pulpitPage.topupReceiverInput.selectOption(topupReceiverNumber);
-    await pulpitPage.topupAmountInput.fill(topupAmount);
-    await pulpitPage.topupAgreementCheckbox.click();
-    await pulpitPage.topupExecuteButton.click();
-    await pulpitPage.closeButton.click();
+    await pulpitPage.makeMobileTopup(topupReceiverNumber, topupAmount);
 
     //Assert
     const newValue = await pulpitPage.integer.innerText();
