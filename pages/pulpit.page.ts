@@ -41,7 +41,7 @@ export class PulpitPage {
     receiverId: string,
     transferAmount: string,
     transferTitle: string,
-  ) {
+  ): Promise<void> {
     await this.transferReceiver.selectOption(receiverId);
     await this.transferAmount.fill(transferAmount);
     await this.transferTitle.fill(transferTitle);
@@ -50,7 +50,10 @@ export class PulpitPage {
     await this.closeButton.click();
   }
 
-  async makeMobileTopup(topupReceiverNumber: string, topupAmount: string) {
+  async makeMobileTopup(
+    topupReceiverNumber: string,
+    topupAmount: string,
+  ): Promise<void> {
     await this.topupReceiverInput.selectOption(topupReceiverNumber);
     await this.topupAmountInput.fill(topupAmount);
     await this.topupAgreementCheckbox.click();
